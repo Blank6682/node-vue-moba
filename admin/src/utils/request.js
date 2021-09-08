@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-    baseUrl: "http://loaclhost/3000/admin/api",
+    baseURL: "http://localhost:3000/admin/api/",
     timeout: 5000
 })
 

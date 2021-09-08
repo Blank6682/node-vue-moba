@@ -1,0 +1,13 @@
+@url = http://localhost:3000/admin/api/
+@json = Content-Type: application/json
+
+
+GET {{url}}category
+
+###
+POST {{url}}category
+{{json}}
+
+{
+    "name":"blank"
+}
