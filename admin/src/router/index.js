@@ -9,14 +9,16 @@ const routes = [
     children: [
       {
         path: "/category",
-        component: () =>
-          import("../views/category/CategoryList.vue"),
+        component: () => import("../views/category/CategoryList.vue"),
       },
       {
-        path: "/category/:id",
-        name: "category",
-        component: () =>
-          import("../views/category/CategoryAdd.vue"),
+        path: "/category/edit/:id",
+        props: true,
+        component: () => import("../views/category/CategoryAdd.vue"),
+      },
+      {
+        path: "/category/create",
+        component: () => import("../views/category/CategoryAdd.vue"),
       },
     ]
   },

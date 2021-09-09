@@ -1,50 +1,84 @@
 <template>
   <div class="add-categoire">
-    <h1>新建分类</h1>
-    <el-form ref="form" :model="form" label-width="80px">
+    <h1>{{ categoryId ? "编辑" : "新建" }}分类</h1>
+    <el-form ref="formsss" :model="form" :rules="rules" label-width="80px">
+      <el-form-item label="上级分类">
+        <el-select v-model="value" multiple placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addCatery">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button type="primary" @click="editCategory" v-if="categoryId"
+          >保存</el-button
+        >
+        <el-button type="primary" @click="addCategory" v-else
+          >立即创建</el-button
+        >
+        <el-button @click="router.push({ path: '/category' })">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import { ElMessage } from 'element-plus'
-import { post } from '../../api/index';
+import { post, get, put } from '../../api/index';
+import { useRouter, useRoute } from 'vue-router';
 
 export default defineComponent({
   setup () {
-    const data = reactive({
-      form: {
-        name: ""
-      },
-    })
+    const router = useRouter()
+    const route = useRoute()
+
+    const formsss = ref(null)
+    const form = reactive({ name: "" })
+    const rules = {
+      name: [{ required: true, message: "请输入名称", tirgger: "blur" }]
+    }
+    const categoryId = route.params.id
 
 
-    const addCatery = async () => {
-      await post("category", data.form).then((res) => {
-        if (res.status === 200) {
-          ElMessage.success('添加成功！')
-          // data.form.name = ""
-        }
-
-        // 
-      }).catch((err) => {
-        ElMessage.error('添加失败！')
-        console.log(err)
-      })
+    //编辑
+    if (categoryId) {
+      const getCategoryInfo = async () => {
+        const res = await get(`category/${categoryId}`)
+        form.name = res.data.name
+      }
+      getCategoryInfo()
     }
 
-    const { form } = toRefs(data)
+    //添加
+    const addCategory = async () => {
+      await post("category", form)
+      ElMessage.success('添加成功！')
+      router.push({ path: "/category" })
+    }
+
+    //编辑
+    const editCategory = async () => {
+      await put(`category/${categoryId}`, form)
+      ElMessage.success('编辑成功！')
+      router.push({ path: "/category" })
+
+    }
+
     return {
-      addCatery,
-      form
+      addCategory,
+      editCategory,
+      form,
+      formsss,
+      rules,
+      categoryId
     }
   }
 })

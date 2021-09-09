@@ -1,14 +1,15 @@
 <template>
   <div class="categoire-list">
-    <el-button type="primary" @click="router.push({ name: 'category' })"
+    <el-button type="primary" @click="router.push({ path: '/category/create' })"
       ><i class="el-icon-plus"></i> 新增分类</el-button
     >
     <el-table :data="tableData" width="100%">
-      <el-table-column prop="name" label="姓名" width="120"> </el-table-column>
+      <el-table-column prop="_id" label="Id"> </el-table-column>
+      <el-table-column prop="name" label="姓名"> </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template #default="scope">
           <el-button
-            @click.prevent="eidtCategory(scope.row._id)"
+            @click.prevent="editCategory(scope.row._id)"
             type="text"
             size="small"
           >
@@ -51,8 +52,8 @@ export default defineComponent({
     getCategoryList()
 
     //编辑数据
-    const eidtCategory = async (id) => {
-      router.push({ path: `category/${id}` })
+    const editCategory = async (id) => {
+      router.push({ path: `/category/edit/${id}` })
     }
 
     //删除数据
@@ -70,7 +71,7 @@ export default defineComponent({
     console.log(tableData)
     return {
       tableData,
-      eidtCategory,
+      editCategory,
       deleteCategory,
       router
     };
