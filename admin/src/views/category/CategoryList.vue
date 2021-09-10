@@ -1,11 +1,17 @@
 <template>
   <div class="categoire-list">
-    <el-button type="primary" @click="router.push({ path: '/category/create' })"
-      ><i class="el-icon-plus"></i> 新增分类</el-button
+    <el-breadcrumb
+      separator-class="el-icon-arrow-right"
+      style="margin-bottom: 20px"
     >
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>分类管理</el-breadcrumb-item>
+      <el-breadcrumb-item>分类列表</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-table :data="tableData" width="100%">
       <el-table-column prop="_id" label="Id"> </el-table-column>
-      <el-table-column prop="name" label="姓名"> </el-table-column>
+      <el-table-column prop="parent.name" label="上级分类"> </el-table-column>
+      <el-table-column prop="name" label="名称"> </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template #default="scope">
           <el-button
@@ -16,7 +22,7 @@
             编辑
           </el-button>
           <el-button
-            @click.prevent="deleteCategory(scope.row._id)"
+            @click.prevent="deleteCategory(scope.row)"
             type="text"
             size="small"
           >
@@ -29,10 +35,10 @@
 </template>
 
 <script>
-import { ElMessage } from 'element-plus';
 import { defineComponent, reactive, toRefs } from 'vue';
-import { get, del } from '../../api/index';
 import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { get, del } from '../../api/index';
 
 export default defineComponent({
   setup () {
@@ -57,18 +63,25 @@ export default defineComponent({
     }
 
     //删除数据
-    const deleteCategory = async (id) => {
-      await del(`category/${id}`).then(() => {
-        ElMessage.success("删除成功")
-        getCategoryList()
-      }).catch(() => {
-        ElMessage.warning("删除失败")
-      })
+    const deleteCategory = (row) => {
+      ElMessageBox
+        .confirm(`是否确定要删除分类 "${row.name}"?`, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(async () => {
+          await del(`category/${row._id}`)
+          ElMessage.success("删除成功")
+          getCategoryList()
+        })
+        .catch(() => {
+          // catch
+        });
     }
 
     const { tableData } = toRefs(data)
 
-    console.log(tableData)
     return {
       tableData,
       editCategory,

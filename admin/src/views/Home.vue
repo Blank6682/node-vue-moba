@@ -4,13 +4,15 @@
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu :default-openeds="['1']" router>
           <el-sub-menu index="1">
-            <template #title><i class="el-icon-message"></i>导航一</template>
+            <template #title><i class="el-icon-message"></i>首页</template>
             <el-menu-item-group>
-              <template #title>分类</template>
+              <template #title>分类管理</template>
+              <el-menu-item index="/category/create">新增分类</el-menu-item>
               <el-menu-item index="/category">分类列表</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+            <el-menu-item-group title="英雄管理">
+              <el-menu-item index="/hero/create">新增英雄</el-menu-item>
+              <el-menu-item index="/hero">英雄列表</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
         </el-menu>

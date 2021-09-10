@@ -7,6 +7,7 @@ const routes = [
     name: "Home",
     component: Home,
     children: [
+      //分类
       {
         path: "/category",
         component: () => import("../views/category/CategoryList.vue"),
@@ -19,6 +20,20 @@ const routes = [
       {
         path: "/category/create",
         component: () => import("../views/category/CategoryAdd.vue"),
+      },
+      //英雄
+      {
+        path: "/hero",
+        component: () => import("../views/hero/HeroList.vue"),
+      },
+      {
+        path: "/hero/edit/:id",
+        props: true,
+        component: () => import("../views/hero/HeroAdd.vue"),
+      },
+      {
+        path: "/hero/create",
+        component: () => import("../views/hero/HeroAdd.vue"),
       },
     ]
   },

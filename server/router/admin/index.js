@@ -7,8 +7,12 @@ module.exports = app => {
 
     //获取资源列表
     router.get("/", async (req, res) => {
-        const model = await req.Model.find()
-        res.send(model)
+        const queryOptions = {}
+        if (req.Model.modelName === 'Category') {
+            queryOptions.populate = 'parent'
+        }
+        const items = await req.Model.find().setOptions(queryOptions).limit(100)
+        res.send(items)
     })
 
     //获取资源详情
