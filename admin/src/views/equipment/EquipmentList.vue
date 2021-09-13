@@ -5,24 +5,28 @@
       style="margin-bottom: 20px"
     >
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>分类管理</el-breadcrumb-item>
-      <el-breadcrumb-item>分类列表</el-breadcrumb-item>
+      <el-breadcrumb-item>装备管理</el-breadcrumb-item>
+      <el-breadcrumb-item>装备列表</el-breadcrumb-item>
     </el-breadcrumb>
     <el-table :data="tableData" width="100%">
       <el-table-column prop="_id" label="Id"> </el-table-column>
-      <el-table-column prop="parent.name" label="上级分类"> </el-table-column>
       <el-table-column prop="name" label="名称"> </el-table-column>
+      <el-table-column label="图标">
+        <template #default="scope">
+          <img :src="scope.row.icon" width="50" height="40" alt="装备图标" />
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template #default="scope">
           <el-button
-            @click.prevent="editCategory(scope.row._id)"
+            @click.prevent="editEquipment(scope.row._id)"
             type="text"
             size="small"
           >
             编辑
           </el-button>
           <el-button
-            @click.prevent="deleteCategory(scope.row)"
+            @click.prevent="deleteEquipment(scope.row)"
             type="text"
             size="small"
           >
@@ -48,22 +52,22 @@ export default defineComponent({
     })
 
     //获取列表数据
-    const getCategoryList = async () => {
-      await get("rest/category").then((res) => {
+    const getEquipmentList = async () => {
+      await get("rest/equipment").then((res) => {
         data.tableData = res
       }).catch(() => {
         ElMessage.warning("数据获取失败")
       })
     }
-    getCategoryList()
+    getEquipmentList()
 
     //编辑数据
-    const editCategory = async (id) => {
-      router.push({ path: `/category/edit/${id}` })
+    const editEquipment = async (id) => {
+      router.push({ path: `/equipment/edit/${id}` })
     }
 
     //删除数据
-    const deleteCategory = (row) => {
+    const deleteEquipment = (row) => {
       ElMessageBox
         .confirm(`是否确定要删除分类 "${row.name}"?`, "提示", {
           confirmButtonText: "确定",
@@ -71,9 +75,9 @@ export default defineComponent({
           type: "warning"
         })
         .then(async () => {
-          await del(`rest/category/${row._id}`)
+          await del(`rest/equipment/${row._id}`)
           ElMessage.success("删除成功")
-          getCategoryList()
+          getEquipmentList()
         })
     }
 
@@ -81,9 +85,9 @@ export default defineComponent({
 
     return {
       tableData,
-      editCategory,
-      deleteCategory,
-      router
+      router,
+      editEquipment,
+      deleteEquipment,
     };
   },
 });

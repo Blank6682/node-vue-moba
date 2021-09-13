@@ -6,7 +6,7 @@ const request = axios.create({
 })
 
 //请求拦截,主要是验证token
-axios.interceptors.request.use(
+request.interceptors.request.use(
     config => {
         //暂不做验证
         // if (localStorage.getItem("token")) {
@@ -20,7 +20,7 @@ axios.interceptors.request.use(
 )
 
 //响应拦截,主要是验证是否请求成功
-axios.interceptors.response.use(
+request.interceptors.response.use(
     response => {
         const res = response.data
         if (res.status && res.status !== 200) {
@@ -33,5 +33,4 @@ axios.interceptors.response.use(
         Promise.reject(error)
     }
 )
-
 export default request

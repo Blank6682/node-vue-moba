@@ -15,11 +15,25 @@ const routes = [
       {
         path: "/category/edit/:id",
         props: true,
-        component: () => import("../views/category/CategoryAdd.vue"),
+        component: () => import("../views/category/CategoryCreate.vue"),
       },
       {
         path: "/category/create",
-        component: () => import("../views/category/CategoryAdd.vue"),
+        component: () => import("../views/category/CategoryCreate.vue"),
+      },
+      //装备
+      {
+        path: "/equipment",
+        component: () => import("../views/equipment/EquipmentList.vue"),
+      },
+      {
+        path: "/equipment/edit/:id",
+        props: true,
+        component: () => import("../views/equipment/EquipmentCreate.vue"),
+      },
+      {
+        path: "/equipment/create",
+        component: () => import("../views/equipment/EquipmentCreate.vue"),
       },
       //英雄
       {
@@ -29,11 +43,11 @@ const routes = [
       {
         path: "/hero/edit/:id",
         props: true,
-        component: () => import("../views/hero/HeroAdd.vue"),
+        component: () => import("../views/hero/HeroCreate.vue"),
       },
       {
         path: "/hero/create",
-        component: () => import("../views/hero/HeroAdd.vue"),
+        component: () => import("../views/hero/HeroCreate.vue"),
       },
     ]
   },

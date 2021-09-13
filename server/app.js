@@ -7,6 +7,8 @@ const app = express()
 app.use(express.json())
 //跨域請求
 app.use(require("cors")())
+
+app.use("/uploads", express.static(__dirname + "/uploads"))
 app.use('/', express.static(__dirname + '/web'))
 app.use('/admin', express.static(__dirname + '/admin'))
 

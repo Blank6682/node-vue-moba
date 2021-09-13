@@ -1,14 +1,12 @@
 <template>
-  <div class="add-categoire">
+  <div class="categoire-create">
     <el-breadcrumb
       separator-class="el-icon-arrow-right"
       style="margin-bottom: 20px"
     >
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>分类管理</el-breadcrumb-item>
-      <el-breadcrumb-item
-        >{{ categoryId ? "编辑" : "新建" }}分类</el-breadcrumb-item
-      >
+      <el-breadcrumb-item>{{ ID ? "编辑" : "新建" }}分类</el-breadcrumb-item>
     </el-breadcrumb>
     <el-form :model="form" :rules="rules" label-width="80px">
       <el-form-item label="上级分类">
@@ -26,10 +24,10 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="editCategory" v-if="categoryId"
+        <el-button type="primary" @click="editCategory" v-if="ID"
           >保存</el-button
         >
-        <el-button type="primary" @click="addCategory" v-else
+        <el-button type="primary" @click="createCategory" v-else
           >立即创建</el-button
         >
         <el-button @click="router.push({ path: '/category' })">取消</el-button>
@@ -40,7 +38,7 @@
 
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
 import { post, get, put } from '../../api/index';
 import { useRouter, useRoute } from 'vue-router';
 
@@ -56,30 +54,29 @@ export default defineComponent({
     const rules = {
       name: [{ required: true, message: "请输入名称", tirgger: "blur" }]
     }
-    const categoryId = route.params.id
+    const ID = route.params.id
 
     //获取分类列表
     const getCategories = async () => {
-      const res = await get("category")
-      data.categories = res.data.filter(item => !item.parent)
+      const res = await get("rest/category")
+      data.categories = res.filter(item => !item.parent)
     }
     getCategories()
 
     //编辑
-    if (categoryId) {
-      const getCategoryInfo = async () => {
-        const res = await get(`category/${categoryId}`)
-        data.form = res.data
-      }
-      getCategoryInfo()
+    const getCategoryInfo = async () => {
+      const res = await get(`rest/category/${ID}`)
+      data.form = res
     }
+    ID && getCategoryInfo()
 
-    //添加
-    const addCategory = async () => {
+
+    //新建
+    const createCategory = async () => {
       if (data.form.parent == "") {
         data.form.parent = null;
       }
-      await post("category", data.form)
+      await post("rest/category", data.form)
       ElMessage.success('添加成功！')
       router.push({ path: "/category" })
     }
@@ -89,18 +86,18 @@ export default defineComponent({
       if (data.form.parent == "") {
         data.form.parent = null;
       }
-      await put(`category/${categoryId}`, data.form)
+      await put(`rest/category/${ID}`, data.form)
       ElMessage.success('编辑成功！')
       router.push({ path: "/category" })
 
     }
     const { form, categories } = toRefs(data)
     return {
-      addCategory,
+      createCategory,
       editCategory,
       form,
       rules,
-      categoryId,
+      ID,
       categories
     }
   }

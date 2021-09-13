@@ -8,9 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "autoprefixer": "^10.3.3",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-plus": "^1.1.0-beta.8",
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.15",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"

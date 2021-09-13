@@ -12,17 +12,26 @@ const schema = new mongoose.Schema({
         attack: Number,
         survive: Number
     },
-    skills: [{
-        name: String,
-        imgUrl: String,
-        coolingTime: Number,
-        consume: Number,
-        desc: String
-    }],
+    skills: {
+        passive: {
+            name: String,
+            imgUrl: String,
+            coolingTime: Number,
+            consume: Number,
+            desc: String
+        },
+        initiative: [{
+            name: String,
+            imgUrl: String,
+            coolingTime: Number,
+            consume: Number,
+            desc: String
+        }]
+    },
     upgradeSkillsRecommend: {
-        main: { type: mongoose.SchemaTypes.ObjectId, ref: "skill" },
-        secondary: { type: mongoose.SchemaTypes.ObjectId, ref: "skill" },
-        summoner: [{ type: mongoose.SchemaTypes.ObjectId, ref: "skill" }]
+        main: Number,
+        secondary: Number,
+        summoner: [Number]
     },
     advantageEquipment: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Equipment" }],
     disadvantageEquipment: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Equipment" }],

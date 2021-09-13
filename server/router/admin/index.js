@@ -41,9 +41,29 @@ module.exports = app => {
         })
     })
 
+
     //引入自定义中间件
     const resourceMiddleware = require("../../middleware/resource")
 
-    app.use("/admin/api/:resource", resourceMiddleware(), router)
+    app.use("/admin/api/rest/:resource", resourceMiddleware(), router)
 
+    //引入上传文件组件
+    const multer = require("multer")
+    // const MAO = require("multer-aliyun-oss")
+    const upload = multer({
+        dest: __dirname + "/../../uploads"
+        // storage:MAO({
+        //     config: {
+        //         region: '<region>',//源
+        //         accessKeyId: '<accessKeyId>',//替换为你的ID
+        //         accessKeySecret: '<accessKeySecret>',//你的secret
+        //         bucket: 'node-vue-moba'//路径
+        //     }
+        // })    
+    })
+    app.post("/admin/api/upload", upload.single('file'), async (req, res) => {
+        const file = req.file
+        file.url = `http://localhost:3000/uploads/${file.filename}`
+        res.send(file)
+    })
 }
