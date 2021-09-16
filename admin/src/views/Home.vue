@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-container style="height: 100vh; border: 1px solid #eee">
+    <el-container style="height: 100vh; width: 100vw; border: 1px solid #eee">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu :default-openeds="['1']" router>
           <el-sub-menu index="1">
@@ -17,6 +17,10 @@
             <el-menu-item-group title="装备管理">
               <el-menu-item index="/equipment/create">新增装备</el-menu-item>
               <el-menu-item index="/equipment">装备列表</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group title="资讯管理">
+              <el-menu-item index="/news/create">新增资讯</el-menu-item>
+              <el-menu-item index="/news">资讯列表</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
         </el-menu>

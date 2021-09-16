@@ -12,22 +12,14 @@ const schema = new mongoose.Schema({
         attack: Number,
         survive: Number
     },
-    skills: {
-        passive: {
-            name: String,
-            imgUrl: String,
-            coolingTime: Number,
-            consume: Number,
-            desc: String
-        },
-        initiative: [{
-            name: String,
-            imgUrl: String,
-            coolingTime: Number,
-            consume: Number,
-            desc: String
-        }]
-    },
+    skills: [{
+        name: String,
+        imgUrl: String,
+        coolingTime: Number,
+        consume: Number,
+        desc: String
+    }]
+    ,
     upgradeSkillsRecommend: {
         main: Number,
         secondary: Number,

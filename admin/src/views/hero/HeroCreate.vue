@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-create">
+  <div class="category-create">
     <el-breadcrumb
       separator-class="el-icon-arrow-right"
       style="margin-bottom: 20px"
@@ -23,6 +23,21 @@
         <el-tab-pane label="基本信息" name="first">
           <el-form-item label="名称" prop="name">
             <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="类型">
+            <el-select
+              v-model="form.categories"
+              multiple
+              clearable
+              placeholder="请选择英雄类型"
+            >
+              <el-option
+                v-for="item in categoryList"
+                :key="item._id"
+                :value="item._id"
+                :label="item.name"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="头像">
             <el-upload
@@ -112,6 +127,11 @@
               ></el-option>
             </el-select>
           </el-form-item>
+
+          <el-form-item label="">
+            <el-button> <i class="el-icon-plus"></i>新增技能 </el-button>
+          </el-form-item>
+          <el-form-item label="技能"> </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="英雄关系" name="third">
           <el-form-item label="英雄关系">
@@ -122,7 +142,7 @@
               clearable
             >
               <el-option
-                v-for="item in heroList"
+                v-for="item in categoryList"
                 :label="item.name"
                 :value="item._id"
                 :key="item._id"
@@ -141,7 +161,7 @@
             <el-input type="textarea" v-model="form.teamfightTips"></el-input>
           </el-form-item>
         </el-tab-pane>
-        <el-form-item class="absolute bottom-20">
+        <el-form-item>
           <el-button type="primary" @click="submitForm('form')">
             立即创建
           </el-button>
@@ -190,7 +210,8 @@ export default defineComponent({
         partners: []
       },
       equipmentList: [],
-      activeName: "first"
+      activeName: "first",
+      categoryList: []
     })
 
     const rules = []
@@ -204,11 +225,12 @@ export default defineComponent({
     }
     getEquipmentList()
 
-    const getHeroList = async () => {
-      // const res =  await get("hero")
-      // data.herotList = res.data
+    const getCategoryList = async () => {
+      const res = await get("rest/category")
+      data.categoryList = res
     }
-    getHeroList()
+    getCategoryList()
+
 
     //头像上传
     const handleAvatarSuccess = (res) => {
@@ -243,13 +265,14 @@ export default defineComponent({
       return isJPG && isLt2M
     }
 
-    const { form, equipmentList, heroList, activeName } = toRefs(data)
+    const { form, equipmentList, categoryList, activeName } = toRefs(data)
+    console.log(categoryList)
     return {
       router,
       form,
       rules,
       equipmentList,
-      heroList,
+      categoryList,
       uploadUrl,
       activeName,
       handleAvatarSuccess,

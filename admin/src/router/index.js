@@ -49,6 +49,20 @@ const routes = [
         path: "/hero/create",
         component: () => import("../views/hero/HeroCreate.vue"),
       },
+      //新闻资讯
+      {
+        path: "/news",
+        component: () => import("../views/news/NewsList.vue"),
+      },
+      {
+        path: "/news/edit/:id",
+        props: true,
+        component: () => import("../views/news/NewsCreate.vue"),
+      },
+      {
+        path: "/news/create",
+        component: () => import("../views/news/NewsCreate.vue"),
+      },
     ]
   },
 

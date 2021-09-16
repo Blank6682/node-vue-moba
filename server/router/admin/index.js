@@ -51,7 +51,7 @@ module.exports = app => {
     const multer = require("multer")
     // const MAO = require("multer-aliyun-oss")
     const upload = multer({
-        dest: __dirname + "/../../uploads"
+        dest: __dirname + "/../../public/uploads"
         // storage:MAO({
         //     config: {
         //         region: '<region>',//源
