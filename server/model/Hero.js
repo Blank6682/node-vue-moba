@@ -15,8 +15,8 @@ const schema = new mongoose.Schema({
     skills: [{
         name: String,
         imgUrl: String,
-        coolingTime: Number,
-        consume: Number,
+        delay: String,
+        consume: String,
         desc: String
     }]
     ,
@@ -36,4 +36,4 @@ const schema = new mongoose.Schema({
     }]
 })
 
-module.exports = mongoose.model("Hero", schema, "heroes")
+module.exports = mongoose.model("Hero", schema)

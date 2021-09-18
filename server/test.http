@@ -2,7 +2,7 @@
 @json = Content-Type: application/json
 
 
-GET {{url}}category
+GET {{url}}rest/hero
 
 ###
 POST {{url}}category

@@ -13,6 +13,7 @@
       :rules="rules"
       label-width="100px"
       class="demo-ruleForm"
+      @submit.prevent="save"
     >
       <el-tabs
         v-model="activeName"
@@ -44,8 +45,7 @@
               class="avatar-uploader"
               :action="uploadUrl"
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
+              :on-success="(res) => (form.avatar = res.url)"
             >
               <img v-if="form.avatar" :src="form.avatar" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -56,10 +56,9 @@
               class="avatar-uploader"
               :action="uploadUrl"
               :show-file-list="false"
-              :on-success="handleBannerSuccess"
-              :before-upload="beforeBnanerUpload"
+              :on-success="(res) => (form.banner = res.url)"
             >
-              <img v-if="form.banner" :src="form.banner" class="avatar" />
+              <img v-if="form.banner" :src="form.banner" class="banner-img" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -128,10 +127,43 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="">
-            <el-button> <i class="el-icon-plus"></i>新增技能 </el-button>
+          <el-form-item label="技能">
+            <el-button @click="form.skills.push({})">
+              <i class="el-icon-plus"></i>新增技能
+            </el-button>
           </el-form-item>
-          <el-form-item label="技能"> </el-form-item>
+          <el-row>
+            <el-col :span="12" v-for="(item, i) in form.skills" :key="i">
+              <el-form-item label="名称">
+                <el-input v-model="item.name"></el-input>
+              </el-form-item>
+              <el-form-item label="图标">
+                <el-upload
+                  class="avatar-uploader"
+                  :action="uploadUrl"
+                  :show-file-list="false"
+                  :on-success="(res) => (item.imgUrl = res.url)"
+                >
+                  <img v-if="item.imgUrl" :src="item.imgUrl" class="avatar" />
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+              <el-form-item label="冷却值">
+                <el-input v-model="item.delay"></el-input>
+              </el-form-item>
+              <el-form-item label="消耗">
+                <el-input v-model="item.consume"></el-input>
+              </el-form-item>
+              <el-form-item label="描述">
+                <el-input v-model="item.desc" type="textarea"></el-input>
+              </el-form-item>
+              <el-form-item label="">
+                <el-button type="danger" @click="form.skills.splice(i, 1)"
+                  >删除</el-button
+                >
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-tab-pane>
         <el-tab-pane label="英雄关系" name="third">
           <el-form-item label="英雄关系">
@@ -142,7 +174,7 @@
               clearable
             >
               <el-option
-                v-for="item in categoryList"
+                v-for="item in heroList"
                 :label="item.name"
                 :value="item._id"
                 :key="item._id"
@@ -162,10 +194,8 @@
           </el-form-item>
         </el-tab-pane>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('form')">
-            立即创建
-          </el-button>
-          <el-button @click="resetForm('form')">重置</el-button>
+          <el-button type="primary" native-type="submit"> 保存 </el-button>
+          <el-button @click="router.push({ path: '/hero' })">取消</el-button>
         </el-form-item>
       </el-tabs>
     </el-form>
@@ -174,13 +204,15 @@
 
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import request from '../../utils/request';
-import { get } from '../../api/index.js';
+import { get, post, put } from '../../api/index.js';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
   setup () {
     const router = useRouter()
+    const route = useRoute()
 
     const data = reactive({
       form: {
@@ -195,13 +227,7 @@ export default defineComponent({
           attack: 0,
           survive: 0
         },
-        skills: [{
-          name: "",
-          imgUrl: "",
-          coolingTime: 0,
-          consume: 0,
-          desc: ""
-        }],
+        skills: [],// {name: "",imgUrl: "",coolingTime: "",consume: "",desc: ""}
         advantageEquipment: [],
         disadvantageEquipment: [],
         useTips: "",
@@ -211,74 +237,52 @@ export default defineComponent({
       },
       equipmentList: [],
       activeName: "first",
-      categoryList: []
+      categoryList: [],
+      heroList: []
     })
 
     const rules = []
-
+    const ID = route.params.id
     const uploadUrl = `${request.defaults.baseURL}upload`
 
-    //获取装备列表数据
-    const getEquipmentList = async () => {
-      const res = await get("rest/equipment")
-      data.equipmentList = res
+    //获取列表数据
+    const getList = async (list, url) => {
+      const res = await get(url)
+      data[list] = res
     }
-    getEquipmentList()
+    getList('categoryList', "rest/category")//分类列表
+    getList('equipmentList', "rest/equipment")//装备列表
+    getList('heroList', "rest/hero")//英雄列表
 
-    const getCategoryList = async () => {
-      const res = await get("rest/category")
-      data.categoryList = res
+    //获取数据详情
+    const getHeroInfo = async () => {
+      const res = await get(`/rest/hero/${ID}`)
+      data.form = res
     }
-    getCategoryList()
+    ID && getHeroInfo()
 
-
-    //头像上传
-    const handleAvatarSuccess = (res) => {
-      data.form.avatar = res.url
-    }
-    const beforeAvatarUpload = (file) => {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
+    //更新数据
+    const save = async () => {
+      if (ID) {
+        await put(`rest/hero/${ID}`, data.form)
+      } else {
+        await post('rest/hero/', data.form)
       }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
-    }
-    //banner上传
-    const handleBannerSuccess = (res) => {
-      data.form.banner = res.url
-    }
-    const beforeBnanerUpload = (file) => {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传banner图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传banne图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
+      ElMessage.success('操作成功！')
+      // router.push({ path: "/hero" })
     }
 
     const { form, equipmentList, categoryList, activeName } = toRefs(data)
-    console.log(categoryList)
+
     return {
       router,
-      form,
       rules,
+      form,
       equipmentList,
       categoryList,
       uploadUrl,
       activeName,
-      handleAvatarSuccess,
-      beforeAvatarUpload,
-      handleBannerSuccess,
-      beforeBnanerUpload
+      save
     }
   }
 
@@ -307,6 +311,12 @@ export default defineComponent({
 .avatar {
   width: 178px;
   height: 178px;
+  border-radius: 50%;
+  display: block;
+}
+.banner-img {
+  width: 300px;
+  height: 200px;
   display: block;
 }
 </style>
