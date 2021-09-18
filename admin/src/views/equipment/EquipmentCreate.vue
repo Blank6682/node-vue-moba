@@ -8,7 +8,7 @@
       <el-breadcrumb-item>装备管理</el-breadcrumb-item>
       <el-breadcrumb-item>{{ ID ? "编辑" : "新增" }}装备</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-form :model="equipment" label-width="80px">
+    <el-form :model="equipment" label-width="80px" @submit.prevent="save">
       <el-form-item label="名称">
         <el-input
           v-model="equipment.name"
@@ -27,12 +27,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="">
-        <el-button type="primary" @click="editEquipment" v-if="ID"
-          >保存</el-button
-        >
-        <el-button type="primary" @click="createEquipment" v-else
-          >立即创建</el-button
-        >
+        <el-button type="primary" @click="editEquipment">保存</el-button>
         <el-button @click="router.push({ path: '/equipment' })">取消</el-button>
       </el-form-item>
     </el-form>
@@ -72,19 +67,14 @@ export default defineComponent({
     ID && getEquipmentInfo()
 
     //更新数据
-    //新建
-    const createEquipment = async () => {
-      await post("rest/equipment", data.equipment)
+    const save = async () => {
+      if (ID) {
+        await put(`rest/equipment/${ID}`, data.equipment)//编辑
+      } else {
+        await post("rest/equipment", data.equipment)//新增
+      }
       ElMessage.success('添加成功！')
-      router.push({ path: "/equipment" })
-    }
-
-    //编辑
-    const editEquipment = async () => {
-      await put(`rest/equipment/${ID}`, data.equipment)
-      ElMessage.success('编辑成功！')
-      router.push({ path: "/equipment" })
-
+      // router.push({ path: "/equipment" })
     }
 
     const { equipment } = toRefs(data)
@@ -94,8 +84,7 @@ export default defineComponent({
       ID,
       router,
       afterUpload,
-      createEquipment,
-      editEquipment
+      save
     }
   },
 })

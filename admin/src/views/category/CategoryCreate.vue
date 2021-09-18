@@ -8,7 +8,12 @@
       <el-breadcrumb-item>分类管理</el-breadcrumb-item>
       <el-breadcrumb-item>{{ ID ? "编辑" : "新建" }}分类</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-form :model="form" :rules="rules" label-width="80px">
+    <el-form
+      :model="form"
+      :rules="rules"
+      label-width="80px"
+      @submit.prevent="save"
+    >
       <el-form-item label="上级分类">
         <el-select v-model="form.parent" clearable placeholder="请选择">
           <el-option
@@ -24,12 +29,7 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="editCategory" v-if="ID"
-          >保存</el-button
-        >
-        <el-button type="primary" @click="createCategory" v-else
-          >立即创建</el-button
-        >
+        <el-button type="primary" native-type="submit">保存</el-button>
         <el-button @click="router.push({ path: '/category' })">取消</el-button>
       </el-form-item>
     </el-form>
@@ -70,31 +70,22 @@ export default defineComponent({
     }
     ID && getCategoryInfo()
 
-
-    //新建
-    const createCategory = async () => {
+    const save = async () => {
       if (data.form.parent == "") {
         data.form.parent = null;
       }
-      await post("rest/category", data.form)
-      ElMessage.success('添加成功！')
-      router.push({ path: "/category" })
-    }
-
-    //编辑
-    const editCategory = async () => {
-      if (data.form.parent == "") {
-        data.form.parent = null;
+      if (ID) {
+        await put(`rest/category/${ID}`, data.form)//编辑
+      } else {
+        await post("rest/category", data.form)//新增
       }
-      await put(`rest/category/${ID}`, data.form)
-      ElMessage.success('编辑成功！')
+      ElMessage.success('操作成功！')
       router.push({ path: "/category" })
-
     }
+
     const { form, categories } = toRefs(data)
     return {
-      createCategory,
-      editCategory,
+      save,
       form,
       rules,
       ID,
