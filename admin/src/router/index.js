@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "../store";
 import Home from "../views/Home.vue";
 
 const routes = [
@@ -79,12 +80,42 @@ const routes = [
       },
     ]
   },
-
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/login/login.vue")
+  },
 ];
+
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+//刷新页面，重新设置token
+if (sessionStorage.getItem("token")) {
+  store.commit("login", sessionStorage.getItem("token"))
+}
+
+//路由守卫
+router.beforeEach((to, form, next) => {
+  //登录则清除token
+  if (to.path == "/login") {
+    store.commit("logout", sessionStorage.removeItem("token"))
+    next()
+  } else {
+    const token = sessionStorage.getItem("token")
+    if (!token) {
+      next({
+        path: "/login",
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    }
+  }
+  next()
+})
 
 export default router;
