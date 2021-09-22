@@ -1,6 +1,11 @@
+
 module.exports = app => {
     const express = require("express")
+    const jwt = require("jsonwebtoken")
 
+    //设置请求返回状态数据
+    const assert = require("http-assert")
+    const AdminUser = require("../../model/AdminUser")
     const router = express.Router({
         mergeParams: true
     })
@@ -66,4 +71,25 @@ module.exports = app => {
         file.url = `http://localhost:3000/uploads/${file.filename}`
         res.send(file)
     })
+
+    async function addAdminUser () {
+        await AdminUser.insertMany({
+            username: "admin",
+            password: "123456"
+        })
+    }
+    addAdminUser()
+    app.post("/admin/api/login", async (req, res) => {
+        const { username, password } = req.body
+        //找到用户
+        const user = await AdminUser.findOne({ username }).select("+password")
+        assert(user, 422, "用户不存在")
+        //校验密码
+        const isValid = require("bcrypt").compareSync(password, user.password)
+        assert(isValid, 422, "密码正确")
+        //返回token
+        const token = jwt.sign({ id: user._id }, app.get("secret"))
+        res.rend(token)
+    })
+
 }

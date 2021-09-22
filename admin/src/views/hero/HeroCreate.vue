@@ -15,12 +15,7 @@
       class="demo-ruleForm"
       @submit.prevent="save"
     >
-      <el-tabs
-        v-model="activeName"
-        type="border-card"
-        lazy="true"
-        class="min-h-750 relative"
-      >
+      <el-tabs v-model="activeName" type="border-card" lazy="true">
         <el-tab-pane label="基本信息" name="first">
           <el-form-item label="名称" prop="name">
             <el-input v-model="form.name"></el-input>

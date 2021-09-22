@@ -8,10 +8,10 @@ const request = axios.create({
 //请求拦截,主要是验证token
 request.interceptors.request.use(
     config => {
-        //暂不做验证
-        // if (localStorage.getItem("token")) {
-        //     config.headers["token"] = localStorage.getItem("token")
-        // }
+        //验证token
+        if (sessionStorage.getItem("token")) {
+            config.headers["token"] = sessionStorage.getItem("token")
+        }
         return config
     },
     error => {
