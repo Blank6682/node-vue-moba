@@ -63,6 +63,20 @@ const routes = [
         path: "/news/create",
         component: () => import("../views/news/NewsCreate.vue"),
       },
+      //广告
+      {
+        path: "/ad",
+        component: () => import("../views/ad/AdList.vue"),
+      },
+      {
+        path: "/ad/edit/:id",
+        props: true,
+        component: () => import("../views/ad/AdCreate.vue"),
+      },
+      {
+        path: "/ad/create",
+        component: () => import("../views/ad/AdCreate.vue"),
+      },
     ]
   },
 

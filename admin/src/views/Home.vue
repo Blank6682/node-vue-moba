@@ -22,6 +22,10 @@
               <el-menu-item index="/news/create">新增资讯</el-menu-item>
               <el-menu-item index="/news">资讯列表</el-menu-item>
             </el-menu-item-group>
+            <el-menu-item-group title="广告位管理">
+              <el-menu-item index="/ad/create">新增广告</el-menu-item>
+              <el-menu-item index="/ad">广告列表</el-menu-item>
+            </el-menu-item-group>
           </el-sub-menu>
         </el-menu>
       </el-aside>
