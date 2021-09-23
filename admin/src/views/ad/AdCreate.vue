@@ -25,7 +25,7 @@
                 placeholder="请输入广告链接"
               ></el-input>
             </el-form-item>
-            <el-form-item label="图片">
+            <el-form-item label="图片" style="margin-top: 10px">
               <el-upload
                 class="avatar-uploader"
                 :action="uploadUrl"
@@ -36,8 +36,11 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
-            <el-form-item label="">
-              <el-button type="danger" @click="ad.items.splice(i, 1)"
+            <el-form-item label="" style="margin-left: 80px">
+              <el-button
+                type="danger"
+                size="mini"
+                @click="ad.items.splice(i, 1)"
                 >删除</el-button
               >
             </el-form-item>

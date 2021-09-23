@@ -3,6 +3,15 @@ import store from "../store";
 import Home from "../views/Home.vue";
 
 const routes = [
+  // {
+  //   path: "",
+  //   redirect: "/login"
+  // },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/login/login.vue")
+  },
   {
     path: "/",
     name: "Home",
@@ -78,12 +87,21 @@ const routes = [
         path: "/ad/create",
         component: () => import("../views/ad/AdCreate.vue"),
       },
+      //管理员
+      {
+        path: "/user",
+        component: () => import("../views/user/UserList.vue"),
+      },
+      {
+        path: "/user/edit/:id",
+        props: true,
+        component: () => import("../views/user/UserCreate.vue"),
+      },
+      {
+        path: "/user/create",
+        component: () => import("../views/user/UserCreate.vue"),
+      },
     ]
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: () => import("../views/login/login.vue")
   },
 ];
 
@@ -93,29 +111,30 @@ const router = createRouter({
   routes,
 });
 
+
 //刷新页面，重新设置token
 if (sessionStorage.getItem("token")) {
   store.commit("login", sessionStorage.getItem("token"))
 }
 
 //路由守卫
-router.beforeEach((to, form, next) => {
-  //登录则清除token
-  if (to.path == "/login") {
-    store.commit("logout", sessionStorage.removeItem("token"))
-    next()
-  } else {
-    const token = sessionStorage.getItem("token")
-    if (!token) {
-      next({
-        path: "/login",
-        query: {
-          redirect: to.fullPath
-        }
-      })
-    }
-  }
-  next()
-})
+// router.beforeEach((to, form, next) => {
+//   //登录则清除token
+//   if (to.path == "/login") {
+//     store.commit("logout", sessionStorage.removeItem("token"))
+//     next()
+//   } else {
+//     const token = sessionStorage.getItem("token")
+//     if (!token) {
+//       next({
+//         path: "/login",
+//         query: {
+//           redirect: to.fullPath
+//         }
+//       })
+//     }
+//   }
+//   next()
+// })
 
 export default router;

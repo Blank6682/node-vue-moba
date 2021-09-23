@@ -72,13 +72,13 @@ module.exports = app => {
         res.send(file)
     })
 
-    async function addAdminUser () {
-        await AdminUser.insertMany({
-            username: "admin",
-            password: "123456"
-        })
-    }
-    addAdminUser()
+    // async function addAdminUser () {
+    //     await AdminUser.insertMany({
+    //         username: "admin",
+    //         password: "123456"
+    //     })
+    // }
+    // addAdminUser()
     app.post("/admin/api/login", async (req, res) => {
         const { username, password } = req.body
         //找到用户

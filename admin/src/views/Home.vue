@@ -27,6 +27,14 @@
               <el-menu-item index="/ad">广告列表</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
+          <el-sub-menu index="2">
+            <template #title><i class="el-icon-house"></i>人员管理</template>
+            <el-menu-item-group>
+              <template #title>管理员管理</template>
+              <el-menu-item index="/user/create">新增管理员</el-menu-item>
+              <el-menu-item index="/user">管理员列表</el-menu-item>
+            </el-menu-item-group>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
 

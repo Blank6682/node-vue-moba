@@ -5,9 +5,10 @@
 GET {{url}}rest/hero
 
 ###
-POST {{url}}category
+POST {{url}}rest/adminUser
 {{json}}
 
 {
-    "name":"blank"
+    "username":"blank",
+    "password":"12345"
 }
