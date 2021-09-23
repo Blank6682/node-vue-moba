@@ -10,13 +10,25 @@
     </el-breadcrumb>
     <el-form :model="news" label-width="80px">
       <el-form-item label="所属分类">
-        <el-input v-model="news.categories" placeholder="请选择"></el-input>
+        <el-select
+          v-model="news.categories"
+          multiple
+          clearable
+          placeholder="请选择分类"
+        >
+          <el-option
+            v-for="itme in categoryList"
+            :key="itme._id"
+            :value="itme._id"
+            :label="item.name"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="标题">
         <el-input v-model="news.title" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="详情">
-        <vue-editor v-model="news.content"></vue-editor>
+        <div class="editor"></div>
       </el-form-item>
       <el-form-item label="">
         <el-button type="primary" @click="editNews" v-if="ID">保存</el-button>
@@ -26,31 +38,28 @@
         <el-button @click="router.push({ path: '/news' })">取消</el-button>
       </el-form-item>
     </el-form>
-    <vue-editor v-model="news.content"></vue-editor>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, onMounted, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { get, post, put } from '../../api/index';
 import { ElMessage } from 'element-plus';
-import { VueEditor } from "vue2-editor";
+import E from "wangeditor";
 
 export default defineComponent({
-  components: {
-    VueEditor
-  },
   setup () {
     const router = useRouter()
     const route = useRoute()
 
     const data = reactive({
       news: {
-        categories: [],
+        categories: {},
         title: "",
-        content: " <h1>一些初始内容</h1> "
-      }
+        content: "1"
+      },
+      categoryList: []
     })
     const ID = route.params.id
 
@@ -61,6 +70,11 @@ export default defineComponent({
     }
     ID && getNewsInfo()
 
+    const getCategoryList = async () => {
+      const res = await get('rest/category')
+      data.categoryList = res
+    }
+    getCategoryList()
     //更新数据
     //新建
     const createNews = async () => {
@@ -76,11 +90,22 @@ export default defineComponent({
       router.push({ path: "/news" })
     }
 
-    const { news } = toRefs(data)
+
+    onMounted(() => {
+      //配置富文本编辑器
+      const editor = new E(".editor")
+      editor.create()
+      editor.config.uploadImgServer = '/upload-img'
+      editor.txt.html(data.news.content)
+    })
+
+
+    const { news, categoryList } = toRefs(data)
     return {
       router,
       news,
       ID,
+      categoryList,
       createNews,
       editNews
     }
