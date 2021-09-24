@@ -3,10 +3,6 @@ import store from "../store";
 import Home from "../views/Home.vue";
 
 const routes = [
-  // {
-  //   path: "",
-  //   redirect: "/login"
-  // },
   {
     path: "/login",
     name: "Login",
@@ -87,11 +83,6 @@ const routes = [
         path: "/ad/create",
         component: () => import("../views/ad/AdCreate.vue"),
       },
-<<<<<<< HEAD
-      //管理员
-=======
-      //广告
->>>>>>> 5f755bb8cb446f8ac723f0ca0beb7285dd0454cc
       {
         path: "/user",
         component: () => import("../views/user/UserList.vue"),
@@ -121,15 +112,11 @@ if (sessionStorage.getItem("token")) {
   store.commit("login", sessionStorage.getItem("token"))
 }
 
-<<<<<<< HEAD
 //路由守卫
-=======
-// //路由守卫
->>>>>>> 5f755bb8cb446f8ac723f0ca0beb7285dd0454cc
 // router.beforeEach((to, form, next) => {
 //   //登录则清除token
 //   if (to.path == "/login") {
-//     store.commit("logout", sessionStorage.removeItem("token"))
+//     store.commit("logout")
 //     next()
 //   } else {
 //     const token = sessionStorage.getItem("token")

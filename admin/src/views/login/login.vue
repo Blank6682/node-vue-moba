@@ -43,10 +43,13 @@
 <script>
 import { ElMessage } from 'element-plus'
 import { defineComponent, reactive, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
 import { post } from '../../api'
+import store from '../../store'
 
 export default defineComponent({
   setup () {
+    const router = useRouter()
     const data = reactive({
       user: {
         username: "",
@@ -63,9 +66,9 @@ export default defineComponent({
     const login = async () => {
       data.logining = true
       const res = await post("login", data.user)
-      if (res.status !== 200) {
-        ElMessage(res.errMessage)
-      }
+      ElMessage.success("登录成功！")
+      store.commit("login", res)
+      router.push({ path: "/" })
       data.logining = false
     }
     const { user, logining, checked } = toRefs(data)

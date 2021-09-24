@@ -10,8 +10,7 @@
     </el-breadcrumb>
     <el-table :data="tableData" width="100%">
       <el-table-column prop="_id" label="Id"> </el-table-column>
-      <el-table-column prop="name" label="名称"> </el-table-column>
-      <el-table-column prop="password" label="密码"> </el-table-column>
+      <el-table-column prop="username" label="名称"> </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template #default="scope">
           <el-button
@@ -49,7 +48,7 @@ export default defineComponent({
 
     //获取列表数据
     const getUserList = async () => {
-      await get("rest/user").then((res) => {
+      await get("rest/adminUser").then((res) => {
         data.tableData = res
       }).catch(() => {
         ElMessage.warning("数据获取失败")

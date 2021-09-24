@@ -1,11 +1,13 @@
 const mongoose = require("mongoose")
 
 const schema = mongoose.Schema({
-    username: String,
+    username: { type: String, unique: true }, // 名字唯一
     password: {
         type: String,
+        select: false,//默认不返回密码
+        //密码加密
         set (val) {
-            return require("crypto").createHash(val, 6)
+            return require("bcrypt").hashSync(val, 10)
         }
     }
 })

@@ -1,7 +1,7 @@
 <template>
   <div class="user-create">
     <el-breadcrumb
-      separator-class="el-password-arrow-right"
+      separator-class="el-icon-arrow-right"
       style="margin-bottom: 20px"
     >
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -16,7 +16,7 @@
         <el-input v-model="user.password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="">
-        <el-button type="primary" @click="editUser">保存</el-button>
+        <el-button type="primary" native-type="submit">保存</el-button>
         <el-button @click="router.push({ path: '/user' })">取消</el-button>
       </el-form-item>
     </el-form>
@@ -44,7 +44,7 @@ export default defineComponent({
 
     //编辑
     const getUserInfo = async () => {
-      const res = await get(`/rest/user/${ID}`)
+      const res = await get(`/rest/adminUser/${ID}`)
       data.user = res
     }
     ID && getUserInfo()
@@ -52,9 +52,9 @@ export default defineComponent({
     //更新数据
     const save = async () => {
       if (ID) {
-        await put(`rest/user/${ID}`, data.user)//编辑
+        await put(`rest/adminUser/${ID}`, data.user)//编辑
       } else {
-        await post("rest/user", data.user)//新增
+        await post("rest/adminUser", data.user)//新增
       }
       ElMessage.success('添加成功！')
       // router.push({ path: "/user" })

@@ -169,10 +169,10 @@
               clearable
             >
               <el-option
-                v-for="item in heroList"
-                :label="item.name"
-                :value="item._id"
-                :key="item._id"
+                v-for="h in heroList"
+                :label="h.name"
+                :value="h._id"
+                :key="h._id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -244,6 +244,7 @@ export default defineComponent({
     const getList = async (list, url) => {
       const res = await get(url)
       data[list] = res
+      console.log(data.heroList)
     }
     getList('categoryList', "rest/category")//分类列表
     getList('equipmentList', "rest/equipment")//装备列表
@@ -267,7 +268,7 @@ export default defineComponent({
       // router.push({ path: "/hero" })
     }
 
-    const { form, equipmentList, categoryList, activeName } = toRefs(data)
+    const { form, equipmentList, categoryList, activeName, heroList } = toRefs(data)
 
     return {
       router,
@@ -275,6 +276,7 @@ export default defineComponent({
       form,
       equipmentList,
       categoryList,
+      heroList,
       uploadUrl,
       activeName,
       save
