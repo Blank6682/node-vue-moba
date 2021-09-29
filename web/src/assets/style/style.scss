@@ -1,0 +1,150 @@
+@import "./variables";
+
+//样式重置
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 13px;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f1f1f1;
+  line-height: 1.2rem;
+  word-break: break-all;
+  word-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  text-decoration: none;
+}
+
+/*********************************************/
+/**************     字体     *****************/
+/*********************************************/
+//字体颜色
+@each $colorKey, $color in $colors {
+  .text-#{$colorKey} {
+    color: $color;
+  }
+  .bg-#{$colorKey} {
+    background-color: $color;
+  }
+}
+
+//字体大小
+@for $var from 8 to 40 {
+  .fz-#{$var} {
+    font-size: #{$var}px;
+  }
+}
+
+//字体对齐方式
+@each $var in (left, center, right) {
+  .text-#{$var} {
+    text-align: $var;
+  }
+}
+
+//text-align
+@each $var in (left, center, right) {
+  .text-#{$var} {
+    text-align: $var;
+  }
+}
+
+/*********************************************/
+/**************     空间     *****************/
+/*********************************************/
+
+//宽度
+.w-100 {
+  width: 100%;
+}
+
+@for $var from 1 to 80 {
+  .w-#{$var} {
+    width: #{$var}px;
+  }
+}
+
+//高度
+.h-100 {
+  height: 100%;
+}
+@for $var from 1 to 80 {
+  .w-#{$var} {
+    height: #{$var}px;
+  }
+}
+
+//内外间距
+//margin,padding
+@for $var from 1 to 30 {
+  //m-x p-x
+  @each $typeKey, $type in $spacing-types {
+    .#{$typeKey}-#{$var} {
+      #{$type}: #{$var}px;
+    }
+    // mt,ml,mr,mb-x  pt,pl,pr,pb-x
+    @each $directionKey, $direction in $spacing-direction {
+      .#{$typeKey}#{$directionKey}-#{$var} {
+        #{$type}-#{$direction}: #{$var}px;
+      }
+    }
+  }
+}
+
+/*********************************************/
+/**************     布局     *****************/
+/*********************************************/
+//flex
+.d-flex {
+  display: flex;
+}
+.flex1 {
+  flex: 1;
+}
+.flex-grow-1 {
+  flex-grow: 1;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-column {
+  flex-direction: column;
+}
+
+@each $key, $var in $justify-content {
+  .jc-#{$key} {
+    justify-content: $var;
+  }
+}
+
+@each $key, $var in $align-items {
+  .ai-#{$key} {
+    align-items: $var;
+  }
+}
+
+/*********************************************/
+/**************     边框     *****************/
+/*********************************************/
+.border {
+  border: 1px solid #000;
+}
+
+@each $directionKey, $direction in $spacing-direction {
+  .b-#{$direction} {
+    border-#{$direction}: 1px;
+  }
+}
+
+@for $var from 1 to 20 {
+  .br-#{$var} {
+    border-radius: #{$var}px;
+  }
+}

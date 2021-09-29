@@ -1,0 +1,49 @@
+//color
+$colors: (
+  "primary": #db9e3f,
+  "white": #fff,
+  "ligth": #999,
+  "gray": gray,
+  "dark": #333,
+  "dark-1": #222,
+  "black": #000,
+);
+
+//space
+$spacing-direction: (
+  t: top,
+  l: left,
+  r: right,
+  b: bottom,
+);
+$spacing-types: (
+  m: margin,
+  p: padding,
+);
+
+$spacing-size: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  5: 1.25rem,
+);
+
+//flex
+$justify-content: (
+  start: flex-start,
+  end: flex-end,
+  left: left,
+  center: center,
+  right: right,
+  space-around: space-around,
+  space-between: space-between,
+);
+
+$align-items: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  stretch: stretch,
+);
